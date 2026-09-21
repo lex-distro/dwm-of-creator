@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# vmstat ile 0.5 saniyelik 2 ölçüm yapıp boşta kalma (idle) yüzdesini çeker
+idle=$(vmstat 1 2 | tail -n1 | awk '{print $15}')
+
+# Idle boşluğu tam okunamadıysa 0 ver
+if [ -z "$idle" ]; then
+  printf " CPU ? "
+  exit 0
+fi
+
+# 100'den boşta kalma oranını çıkararak gerçek kullanımı bulur
+usage=$((100 - idle))
+
+printf ' CPU %s%% ' "$usage"

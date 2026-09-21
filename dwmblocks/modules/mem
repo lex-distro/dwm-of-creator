@@ -1,0 +1,13 @@
+#!/bin/sh
+
+mem_total=$(awk '/MemTotal:/ {print $2}' /proc/meminfo)
+mem_available=$(awk '/MemAvailable:/ {print $2}' /proc/meminfo)
+
+if [ "$mem_total" -gt 0 ]; then
+  mem_used=$((mem_total - mem_available))
+  mem_percent=$((100 * mem_used / mem_total))
+else
+  mem_percent=0
+fi
+
+printf ' RAM  %s%% ' "$mem_percent"

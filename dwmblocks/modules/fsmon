@@ -1,0 +1,7 @@
+#!/bin/sh
+
+ROOTPART=$(df -h | awk '/\/$/ { print $3}') 
+HOMEPART=$(df -h | awk '/\/home/ { print $3}') 
+SWAPPART=$(awk '/\// { print $4 }' /proc/swaps)
+
+echo "   $ROOTPART    $HOMEPART    $SWAPPART "

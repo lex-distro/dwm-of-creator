@@ -1,0 +1,28 @@
+#!/bin/sh
+
+sink="@DEFAULT_SINK@"
+
+muted=$(pactl get-sink-mute "$sink" 2>/dev/null | awk '{print $2}')
+
+# % işaretini içeren ilk sütunu bulup sadece sayı kısmını alır
+vol=$(pactl get-sink-volume "$sink" 2>/dev/null | grep -o '[0-9]\+%' | head -n1 | tr -d '%')
+
+if [ "$muted" = "yes" ]; then
+  printf '  muted '
+  exit
+fi
+
+if [ -z "$vol" ]; then
+  printf '  ? '
+  exit
+fi
+
+if [ "$vol" -ge 65 ]; then
+  icon=""
+elif [ "$vol" -ge 40 ]; then
+  icon=""
+else
+  icon=""
+fi
+
+printf ' %s %s%% ' "$icon" "$vol"
